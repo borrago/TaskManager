@@ -19,7 +19,10 @@ public abstract class ContextBase(DbContextOptions options) : DbContext(options)
 
     public async Task<bool> CommitAsync(CancellationToken cancellationToken = default)
     {
-        this.EnsureAutoHistory(() => new __EFAutoHistory());
+        this.EnsureAutoHistory(() => new __EFAutoHistory()
+        {
+            UserId = Guid.Parse("b4b0f153-cd42-4e3a-ac40-9f435244f0c6"),
+        });
 
         return await SaveChangesAsync(cancellationToken) > 0;
     }

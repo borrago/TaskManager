@@ -12,6 +12,7 @@ public class Task : Entity
     public DateTime EndDate { get; private set; }
     public TaskStatusEnum Status { get; private set; }
     public TaskPriorityEnum Priority { get; private set; }
+    public Guid AssignedUserId { get; set; }
     public Guid ProjectId { get; private set; }
     public Project Project { get; private set; } = null!;
 
@@ -20,9 +21,10 @@ public class Task : Entity
     {
     }
 
-    public Task(Guid projectId, string title, string description, DateTime endDate, TaskStatusEnum status, TaskPriorityEnum priority)
+    public Task(Guid projectId, Guid assignedUserId, string title, string description, DateTime endDate, TaskStatusEnum status, TaskPriorityEnum priority)
     {
         WithProject(projectId);
+        WithProject(assignedUserId);
         WithName(title);
         WithDescription(description);
         WithEndDate(endDate);
@@ -68,5 +70,11 @@ public class Task : Entity
     {
         Validations.ValidarSeNulo(projectId, "O campo Projeto não pode ser nulo.");
         ProjectId = projectId;
+    }
+
+    public void WithAssignedUserId(Guid assignedUserId)
+    {
+        Validations.ValidarSeNulo(assignedUserId, "O campo Usuário não pode ser nulo.");
+        AssignedUserId = assignedUserId;
     }
 }

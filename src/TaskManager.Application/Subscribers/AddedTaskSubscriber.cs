@@ -17,6 +17,7 @@ public class AddedTaskSubscriber(ITaskRepository taskRepository) : IRabbitMqSubr
         {
             Id = req.Id,
             ProjectId = req.ProjectId,
+            AssignedUserId = req.AssignedUserId,
             Title = req.Title,
             Description = req.Description,
             EndDate = req.EndDate,

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -17,10 +18,23 @@ public static class Bootstrapper
         RegisterEndpoints(services);
         AddMediatorHandlers(services);
         RegisterInfra(services);
-
+        AddMediatorPipelineBehaviors(services);
         RegisterCORS(services);
-
         RegisterSubscribers(services);
+
+        return services;
+    }
+
+    private static IServiceCollection AddMediatorPipelineBehaviors(this IServiceCollection services)
+    {
+        var assembly = AppDomain.CurrentDomain.Load("TaskManager.Application");
+
+        AssemblyScanner
+            .FindValidatorsInAssembly(assembly)
+            .ForEach(result => services.AddScoped(result.InterfaceType, result.ValidatorType));
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(FailFastPipeLineBehaviors<,>));
+
         return services;
     }
 

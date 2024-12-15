@@ -17,7 +17,7 @@ public class TaskController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<int>> Create([FromBody] CreateTaskRequest request, CancellationToken cancellationToken)
     {
-        var command = new AddTaskCommandInput(request.ProjectId, request.Title, request.Description, request.EndDate, request.Status, request.Priority);
+        var command = new AddTaskCommandInput(request.ProjectId, request.AssignedUserId, request.Title, request.Description, request.EndDate, request.Status, request.Priority);
         var client = await _mediator.Send(command, cancellationToken);
 
         if (client.Id == Guid.Empty)

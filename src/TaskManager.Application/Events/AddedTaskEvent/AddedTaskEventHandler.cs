@@ -9,7 +9,7 @@ public class AddedTaskEventHandler(IMessageBus messageBus) : INotificationHandle
 
     public async Task Handle(AddedTaskEventInput @event, CancellationToken cancellationToken)
     {
-        var brokerEvent = new AddedTaskMessageBusEventInput(@event.Id, @event.ProjectId, @event.Title, @event.Description, @event.EndDate, @event.Status, @event.Priority);
+        var brokerEvent = new AddedTaskMessageBusEventInput(@event.Id, @event.ProjectId, @event.AssignedUserId, @event.Title, @event.Description, @event.EndDate, @event.Status, @event.Priority);
         await _messageBus.PublishAsync(brokerEvent, cancellationToken);
     }
 }

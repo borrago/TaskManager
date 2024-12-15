@@ -57,7 +57,7 @@ public class GenericReadRepository<T>(IMongoDatabase database, string collection
     public async Task<bool> RemoveManyAsync(FilterDefinition<T> filter, CancellationToken cancellationToken)
     {
         var result = await _collection.DeleteManyAsync(filter, cancellationToken);
-        return result.IsAcknowledged && result.DeletedCount > 0;
+        return result.IsAcknowledged;
     }
 
     private static bool IsDefaultValue(object value)

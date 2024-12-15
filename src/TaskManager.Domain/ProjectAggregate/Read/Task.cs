@@ -14,5 +14,7 @@ public class Task : ReadEntity
 
     [BsonGuidRepresentation(GuidRepresentation.Standard)]
     public Guid ProjectId { get; set; }
+    [BsonGuidRepresentation(GuidRepresentation.Standard)]
+    public Guid AssignedUserId { get; set; }
     public Project Project { get; set; } = null!;
 }
