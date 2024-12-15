@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using MongoDB.Driver;
+using System.Linq.Expressions;
 using TaskManager.Core.DomainObjects;
 
 namespace TaskManager.Core.Infra;
@@ -11,4 +12,5 @@ public interface IGenericReadRepository<T> where T : IReadEntity
     Task<List<T>> GetAllAsync(CancellationToken cancellationToken);
     Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<List<T>> GetAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
+    Task<bool> RemoveManyAsync(FilterDefinition<T> filter, CancellationToken cancellationToken);
 }

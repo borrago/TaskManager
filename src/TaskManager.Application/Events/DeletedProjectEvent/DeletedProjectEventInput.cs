@@ -1,6 +1,6 @@
 ﻿using TaskManager.Core.MessageBus;
 
-namespace TaskManager.Application.Events.DeleteProjectEvent;
+namespace TaskManager.Application.Events.DeletedProjectEvent;
 
 public class DeletedProjectEventInput(Guid id) : IEventInput
 {

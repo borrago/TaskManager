@@ -6,6 +6,7 @@ using TaskManager.Application.Commands.DeleteProjectCommand;
 using TaskManager.Application.Commands.UpdateProjectCommand;
 using TaskManager.Application.Queries.GetProjectByIdQuery;
 using TaskManager.Application.Queries.GetProjectQuery;
+using TaskManager.Application.Queries.GetTaskByProjectIdQuery;
 
 namespace TaskManager.API.Controllers;
 
@@ -57,4 +58,8 @@ public class ProjectController(IMediator mediator) : ControllerBase
     [HttpGet("{id:Guid}")]
     public async Task<ActionResult<GetProjectByIdQueryResult>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
         => Ok(await _mediator.Send(new GetProjectByIdQueryInput(id), cancellationToken));
+
+    [HttpGet("{id:Guid}/tasks")]
+    public async Task<ActionResult<GetTaskByProjectIdQueryResult>> GetTasksById([FromRoute] Guid id, CancellationToken cancellationToken)
+        => Ok(await _mediator.Send(new GetTaskByProjectIdQueryInput(id), cancellationToken));
 }

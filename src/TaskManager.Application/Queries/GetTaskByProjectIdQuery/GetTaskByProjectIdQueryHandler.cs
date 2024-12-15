@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TaskManager.Application.Queries.GetTaskByIdQuery;
 using TaskManager.Infra.TaskRepository.Read;
 
 namespace TaskManager.Application.Queries.GetTaskByProjectIdQuery;
@@ -13,7 +14,7 @@ public class GetTaskByProjectIdQueryHandler(ITaskRepository taskRepository) : IR
 
         return new GetTaskByProjectIdQueryResult
         {
-            Items = tasks.Select(s => new Domain.ProjectAggregate.Read.Task
+            Items = tasks.Select(s => new GetTaskByIdQueryResult
             {
                 Id = s.Id,
                 ProjectId = s.ProjectId,

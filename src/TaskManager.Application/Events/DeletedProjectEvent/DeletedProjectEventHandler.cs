@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TaskManager.Core.MessageBus;
 
-namespace TaskManager.Application.Events.DeleteProjectEvent;
+namespace TaskManager.Application.Events.DeletedProjectEvent;
 
 public class DeletedProjectEventHandler(IMessageBus messageBus) : INotificationHandler<DeletedProjectEventInput>
 {

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TaskManager.Application.Events.DeleteProjectEvent;
+using TaskManager.Application.Events.DeletedProjectEvent;
 using TaskManager.Infra.ProjectRepository.Write;
 
 namespace TaskManager.Application.Commands.DeleteProjectCommand;

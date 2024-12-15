@@ -1,7 +1,9 @@
-﻿using TaskManager.Domain.ProjectAggregate.Read;
+﻿using TaskManager.Application.Queries.GetProjectQuery;
+using TaskManager.Application.Queries.GetTaskByIdQuery;
 
 namespace TaskManager.Application.Queries.GetProjectByIdQuery;
 
-public class GetProjectByIdQueryResult : Project
+public class GetProjectByIdQueryResult : ProjectResult
 {
+    public IEnumerable<GetTaskByIdQueryResult> Tasks { get; set; } = null!;
 }

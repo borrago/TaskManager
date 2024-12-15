@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
 using System.Linq.Expressions;
 using TaskManager.Core.DomainObjects;
 
@@ -18,11 +19,11 @@ public class GenericReadRepository<T>(IMongoDatabase database, string collection
     {
         var updateDefinitions = new List<UpdateDefinition<T>>();
         var properties = typeof(T).GetProperties();
-        
+
         foreach (var property in properties)
         {
             var value = property.GetValue(entity);
-            if (value != null && !IsDefaultValue(value))
+            if (value != null && !IsDefaultValue(value) && !(value is string str && string.IsNullOrEmpty(str)))
             {
                 updateDefinitions.Add(Builders<T>.Update.Set(property.Name, value));
             }
@@ -41,16 +42,22 @@ public class GenericReadRepository<T>(IMongoDatabase database, string collection
         return result.IsAcknowledged && result.DeletedCount > 0;
     }
 
-    public Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
-        => _collection.Find(_ => true).ToListAsync(cancellationToken);
+    public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
+        => await _collection.Find(_ => true).ToListAsync(cancellationToken);
 
-    public Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-        => _collection.Find(entity => entity.Id == id).FirstOrDefaultAsync(cancellationToken);
+    public async Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        => await _collection.Find(entity => entity.Id == id).FirstOrDefaultAsync(cancellationToken);
 
-    public Task<List<T>> GetAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
+    public async Task<List<T>> GetAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
     {
         var filter = predicate ?? (_ => true);
-        return _collection.Find(filter).ToListAsync(cancellationToken);
+        return await _collection.Find(filter).ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> RemoveManyAsync(FilterDefinition<T> filter, CancellationToken cancellationToken)
+    {
+        var result = await _collection.DeleteManyAsync(filter, cancellationToken);
+        return result.IsAcknowledged && result.DeletedCount > 0;
     }
 
     private static bool IsDefaultValue(object value)

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using TaskManager.Domain.ProjectAggregate.Read;
 using TaskManager.Infra.ProjectRepository.Read;
 
 namespace TaskManager.Application.Queries.GetProjectQuery;
@@ -14,7 +13,7 @@ public class GetProjectQueryHandler(IProjectRepository projectRepository) : IReq
 
         return new GetProjectQueryResult
         {
-            Items = tasks.Select(s => new Project
+            Items = tasks.Select(s => new ProjectResult
             {
                 Id = s.Id,
                 Name = s.Name,

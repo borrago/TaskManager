@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using TaskManager.Core.CrossCutting;
 using TaskManager.Infra;

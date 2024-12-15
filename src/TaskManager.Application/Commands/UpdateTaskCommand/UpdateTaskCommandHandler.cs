@@ -11,19 +11,19 @@ public class UpdateTaskCommandHandler(ITaskRepository taskRepository, IMediator 
 
     public async Task<UpdateTaskCommandResult> Handle(UpdateTaskCommandInput command, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetAsync(g => g.Id == command.Id, cancellationToken) ?? throw new Exception("Tarefa não encontrada.");
+        var task = await _projectRepository.GetAsync(g => g.Id == command.Id, cancellationToken) ?? throw new Exception("Tarefa não encontrada.");
 
-        project.WithName(command.Title);
-        project.WithDescription(command.Description);
-        project.WithEndDate(command.EndDate);
-        project.WithStatus(command.Status);
+        task.WithName(command.Title);
+        task.WithDescription(command.Description);
+        task.WithEndDate(command.EndDate);
+        task.WithStatus(command.Status);
 
-        _projectRepository.Update(project);
+        _projectRepository.Update(task);
         await _projectRepository.UnitOfWork.CommitAsync(cancellationToken);
 
-        var @event = new UpdatedTaskEventInput(project.Id, project.Title, project.Description, project.EndDate, project.Status.ToString());
+        var @event = new UpdatedTaskEventInput(task.Id, task.Title, task.Description, task.EndDate, task.Status.ToString());
         await _mediator.Publish(@event, cancellationToken);
 
-        return new UpdateTaskCommandResult(project.Id);
+        return new UpdateTaskCommandResult(task.Id);
     }
 }
