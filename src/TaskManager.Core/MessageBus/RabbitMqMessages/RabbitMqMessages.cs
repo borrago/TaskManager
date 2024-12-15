@@ -49,7 +49,7 @@ public class RabbitMqMessages(IServiceProvider serviceProvider) : IRabbitMqMessa
     public string GetQueueName(string input)
     {
         var segments = input.Split('.');
-        return segments[2].Replace("Subscriber", "");
+        return segments[3].Replace("Subscriber", "").Replace("Event", "");
     }
 
     #region Private Metods

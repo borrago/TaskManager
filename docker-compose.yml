@@ -1,0 +1,50 @@
+﻿services:
+
+  rabbitmq-taskmanager:
+    container_name: "rabbitmq-taskmanager"
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq@123"
+    networks:
+      - TaskManager
+
+  db-sqlserver-taskmanager:
+    container_name: "db-sqlserver-taskmanager"
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    ports:
+      - "8001:1433"
+    volumes:
+      - db-taskmanager:/var/opt/mssql
+      - ./configure-remote-access.sql:/docker-entrypoint-initdb.d/configure-remote-access.sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      SA_PASSWORD: "mF2xXyAU9T85D7KZ8sgLXxG9x"
+    networks:
+      - TaskManager
+
+  mongo-db-taskmanager:
+    container_name: "mongo-db-taskmanager"
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data-taskmanager:/data/db
+    networks:
+      - TaskManager
+      
+volumes:
+  mongodb_data-taskmanager:
+  db-taskmanager:
+    name: db-taskmanager
+    external: false
+    
+networks:
+  TaskManager:
+    name: TaskManager
+    driver: bridge

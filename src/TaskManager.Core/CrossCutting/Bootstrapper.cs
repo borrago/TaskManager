@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using TaskManager.Core.Infra;
 using TaskManager.Core.MessageBus;
 using TaskManager.Core.MessageBus.RabbitMqMessages;
 
@@ -13,10 +15,67 @@ public static class Bootstrapper
     public static IServiceCollection Register(this IServiceCollection services)
     {
         RegisterEndpoints(services);
+        AddMediatorHandlers(services);
+        RegisterInfra(services);
 
         RegisterCORS(services);
 
         RegisterSubscribers(services);
+        return services;
+    }
+
+    private static IServiceCollection RegisterInfra(this IServiceCollection services)
+    {
+        var assembly = AppDomain.CurrentDomain.Load("TaskManager.Infra");
+        var types = assembly.GetTypes();
+        var repositoryInterfaces = new[]
+        {
+            typeof(IGenericRepository<>),
+            typeof(IGenericReadRepository<>)
+        };
+
+        foreach (var repositoryInterface in repositoryInterfaces)
+        {
+            var repositories = types
+                .Where(type => !type.IsInterface && !type.IsAbstract && type.GetInterfaces()
+                    .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == repositoryInterface));
+
+            foreach (var repository in repositories)
+            {
+                var specificInterface = repository.GetInterfaces()
+                    .FirstOrDefault(i => i != repositoryInterface && i.GetInterfaces()
+                        .Any(ii => ii.IsGenericType && ii.GetGenericTypeDefinition() == repositoryInterface));
+
+                if (specificInterface != null)
+                    services.AddScoped(specificInterface, repository);
+            }
+        }
+
+        return services;
+    }
+
+    private static IServiceCollection AddMediatorHandlers(this IServiceCollection services)
+    {
+        services.AddScoped<IMediator, Mediator>();
+        var assembly = AppDomain.CurrentDomain.Load("TaskManager.Application");
+
+        var classTypes = assembly.ExportedTypes.Select(t => t.GetTypeInfo()).Where(t => t.IsClass && !t.IsAbstract);
+
+        foreach (var type in classTypes)
+        {
+            var handlerInterfaceNames = new List<string>
+            {
+                typeof(IRequestHandler<,>).Name,
+                typeof(INotificationHandler<>).Name
+            };
+
+            var handlerTypes = type.ImplementedInterfaces
+                .Select(i => i.GetTypeInfo())
+                .Where(i => handlerInterfaceNames.Contains(i.Name));
+
+            foreach (var handlerType in handlerTypes)
+                services.AddTransient(handlerType.AsType(), type.AsType());
+        }
 
         return services;
     }

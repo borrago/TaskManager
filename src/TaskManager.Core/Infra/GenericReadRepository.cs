@@ -16,7 +16,22 @@ public class GenericReadRepository<T>(IMongoDatabase database, string collection
 
     public async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken)
     {
-        var result = await _collection.ReplaceOneAsync(c => c.Id == entity.Id, entity, new ReplaceOptions(), cancellationToken);
+        var updateDefinitions = new List<UpdateDefinition<T>>();
+        var properties = typeof(T).GetProperties();
+        
+        foreach (var property in properties)
+        {
+            var value = property.GetValue(entity);
+            if (value != null && !IsDefaultValue(value))
+            {
+                updateDefinitions.Add(Builders<T>.Update.Set(property.Name, value));
+            }
+        }
+
+        var updateDefinition = Builders<T>.Update.Combine(updateDefinitions);
+        var filter = Builders<T>.Filter.Eq(p => p.Id, entity.Id);
+        var result = await _collection.UpdateOneAsync(filter, updateDefinition, new UpdateOptions(), cancellationToken);
+
         return result.IsAcknowledged && result.ModifiedCount > 0;
     }
 
@@ -36,5 +51,11 @@ public class GenericReadRepository<T>(IMongoDatabase database, string collection
     {
         var filter = predicate ?? (_ => true);
         return _collection.Find(filter).ToListAsync(cancellationToken);
+    }
+
+    private static bool IsDefaultValue(object value)
+    {
+        var type = value.GetType();
+        return value.Equals(type.IsValueType ? Activator.CreateInstance(type) : null);
     }
 }
