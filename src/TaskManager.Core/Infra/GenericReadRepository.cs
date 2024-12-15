@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using System.Linq.Expressions;
 using TaskManager.Core.DomainObjects;
 
 namespace TaskManager.Core.Infra;
@@ -30,4 +31,10 @@ public class GenericReadRepository<T>(IMongoDatabase database, string collection
 
     public Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         => _collection.Find(entity => entity.Id == id).FirstOrDefaultAsync(cancellationToken);
+
+    public Task<List<T>> GetAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
+    {
+        var filter = predicate ?? (_ => true);
+        return _collection.Find(filter).ToListAsync(cancellationToken);
+    }
 }

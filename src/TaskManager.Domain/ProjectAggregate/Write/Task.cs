@@ -20,8 +20,9 @@ public class Task : Entity
     {
     }
 
-    public Task(string title, string description, DateTime endDate, TaskStatusEnum status, TaskPriorityEnum priority)
+    public Task(Guid projectId, string title, string description, DateTime endDate, TaskStatusEnum status, TaskPriorityEnum priority)
     {
+        WithProject(projectId);
         WithName(title);
         WithDescription(description);
         WithEndDate(endDate);
@@ -61,5 +62,11 @@ public class Task : Entity
     {
         Validations.ValidarSeNulo(priority, "O campo Prioridade não pode ser nulo.");
         Priority = priority;
+    }
+
+    public void WithProject(Guid projectId)
+    {
+        Validations.ValidarSeNulo(projectId, "O campo Projeto não pode ser nulo.");
+        ProjectId = projectId;
     }
 }

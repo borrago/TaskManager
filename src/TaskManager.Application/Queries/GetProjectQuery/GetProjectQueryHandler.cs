@@ -10,11 +10,11 @@ public class GetProjectQueryHandler(IProjectRepository projectRepository) : IReq
 
     public async Task<GetProjectQueryResult> Handle(GetProjectQueryInput request, CancellationToken cancellationToken)
     {
-        var projects = await _projectRepository.GetAllAsync(cancellationToken);
+        var tasks = await _projectRepository.GetAllAsync(cancellationToken);
 
         return new GetProjectQueryResult
         {
-            Items = projects.Select(s => new Project
+            Items = tasks.Select(s => new Project
             {
                 Id = s.Id,
                 Name = s.Name,

@@ -9,16 +9,15 @@ public class GetProjectByIdQueryHandler(IProjectRepository projectRepository) : 
 
     public async Task<GetProjectByIdQueryResult> Handle(GetProjectByIdQueryInput request, CancellationToken cancellationToken)
     {
-        var client = await _projectRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new Exception("Cliente não localizado.");
+        var client = await _projectRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new Exception("Projeto não localizado.");
 
         return new GetProjectByIdQueryResult
         {
             Id = client.Id,
             Name = client.Name,
             Description = client.Description,
-            UserId = client.UserId,
             Tasks = client.Tasks,
+            UserId = client.UserId,
         };
-
     }
 }

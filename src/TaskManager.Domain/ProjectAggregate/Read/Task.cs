@@ -4,11 +4,11 @@ namespace TaskManager.Domain.ProjectAggregate.Read;
 
 public class Task : ReadEntity
 {
-    public string Title { get; private set; } = "";
-    public string Description { get; private set; } = "";
-    public DateTime EndDate { get; private set; }
-    public string Status { get; private set; } = "";
-    public string Priority { get; private set; } = "";
-    public Guid ProjectId { get; private set; }
-    public Project Project { get; private set; } = null!;
+    public string Title { get; set; } = "";
+    public string Description { get; set; } = "";
+    public DateTime EndDate { get; set; }
+    public string Status { get; set; } = "";
+    public string Priority { get; set; } = "";
+    public Guid ProjectId { get; set; }
+    public Project Project { get; set; } = null!;
 }
