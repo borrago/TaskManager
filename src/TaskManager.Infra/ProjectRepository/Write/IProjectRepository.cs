@@ -1,5 +1,5 @@
 ﻿using TaskManager.Core.Infra;
-using TaskManager.Domain.UserAggregate.Write;
+using TaskManager.Domain.ProjectAggregate.Write;
 
 namespace TaskManager.Infra.ProjectRepository.Write;
 

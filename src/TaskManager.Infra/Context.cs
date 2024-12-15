@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TaskManager.Core.Infra;
-using TaskManager.Domain.UserAggregate.Write;
+using TaskManager.Domain.ProjectAggregate.Write;
 
 namespace TaskManager.Infra;
 

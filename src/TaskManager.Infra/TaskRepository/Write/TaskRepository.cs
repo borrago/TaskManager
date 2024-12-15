@@ -2,6 +2,6 @@
 
 namespace TaskManager.Infra.TaskRepository.Write;
 
-public class TaskRepository(Context context) : GenericRepository<Domain.UserAggregate.Write.Task>(context), ITaskRepository
+public class TaskRepository(Context context) : GenericRepository<Domain.ProjectAggregate.Write.Task>(context), ITaskRepository
 {
 }

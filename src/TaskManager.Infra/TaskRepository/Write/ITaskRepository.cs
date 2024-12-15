@@ -2,6 +2,6 @@
 
 namespace TaskManager.Infra.TaskRepository.Write;
 
-public interface ITaskRepository : IGenericRepository<Domain.UserAggregate.Write.Task>
+public interface ITaskRepository : IGenericRepository<Domain.ProjectAggregate.Write.Task>
 {
 }

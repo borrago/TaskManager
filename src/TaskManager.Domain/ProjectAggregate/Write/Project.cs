@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TaskManager.Core.DomainObjects;
 
-namespace TaskManager.Domain.UserAggregate.Write;
+namespace TaskManager.Domain.ProjectAggregate.Write;
 
 public class Project : Entity
 {

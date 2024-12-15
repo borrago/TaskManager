@@ -1,4 +1,4 @@
-﻿namespace TaskManager.Domain.UserAggregate.Write;
+﻿namespace TaskManager.Domain.ProjectAggregate.Write;
 
 public enum TaskPriorityEnum
 {

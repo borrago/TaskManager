@@ -1,6 +1,6 @@
 ﻿using TaskManager.Core.DomainObjects;
 
-namespace TaskManager.Domain.UserAggregate.Read;
+namespace TaskManager.Domain.ProjectAggregate.Read;
 
 public class Task : ReadEntity
 {
