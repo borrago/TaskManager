@@ -23,7 +23,7 @@ public class GetTaskPerformanceQueryHandler(ITaskRepository taskRepository) : IR
             {
                 UserId = g.Key,
                 CompletedTasks = g.Count(),
-                AverageTasks = g.Count() / 30
+                AverageTasks = Math.Round(g.Count() / 30.0, 2)
             })
             .OrderByDescending(r => r.CompletedTasks)
             .ToList();

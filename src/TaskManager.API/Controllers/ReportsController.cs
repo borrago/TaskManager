@@ -17,7 +17,7 @@ public class ReportsController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [HttpGet("performance")]
-    [Authorize(Roles = "Manager")]
+    //[Authorize(Roles = "Manager")]
     public async Task<ActionResult<GetTaskPerformanceQueryResult>> Get(CancellationToken cancellationToken)
         => Ok(await _mediator.Send(new GetTaskPerformanceQueryInput(), cancellationToken));
 }

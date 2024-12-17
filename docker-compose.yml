@@ -1,50 +1,67 @@
 ﻿services:
+  taskmanager:
+    container_name: taskmanager
+    build:
+      context: .
+    ports:
+      - 8089:8089
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${Environment}
+      - ASPNETCORE_HTTP_PORTS=${PORT}
+      - ConnectionStrings__DefaultConnection=${DefaultConnection}
+      - ReadDbSettings__DbConn=${MongoDbConn}
+      - ReadDbSettings__DbName=${DatabaseName}
+      - Rabbitmq__BootstrapServers=${BootstrapServers}
+      - Rabbitmq__HostName=${RabbitmqHostName}
+      - Rabbitmq__Port=${RabbitmqPort}
+      - Rabbitmq__UserName=${RabbitmqUserName}
+      - Rabbitmq__Password=${RabbitmqPassword}
+    depends_on:
+      - TaskManager.database
+      - mongodb
+      - rabbit
+    networks:
+      - TaskManager
 
-  rabbitmq-taskmanager:
-    container_name: "rabbitmq-taskmanager"
+  rabbit:
     image: rabbitmq:3-management
     ports:
       - 5672:5672
       - 15672:15672
     environment:
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq@123"
+      RABBITMQ_DEFAULT_USER: "${RabbitmqUserName}"
+      RABBITMQ_DEFAULT_PASS: "${RabbitmqPassword}"
     networks:
       - TaskManager
 
-  db-sqlserver-taskmanager:
-    container_name: "db-sqlserver-taskmanager"
+  TaskManager.database:
     image: "mcr.microsoft.com/mssql/server:2019-latest"
     ports:
       - "8001:1433"
     volumes:
-      - db-taskmanager:/var/opt/mssql
-      - ./configure-remote-access.sql:/docker-entrypoint-initdb.d/configure-remote-access.sql
+      - TaskManager.database:/var/opt/mssql
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
-      SA_PASSWORD: "mF2xXyAU9T85D7KZ8sgLXxG9x"
+      SA_PASSWORD: "${PassDBA}"
     networks:
       - TaskManager
 
-  mongo-db-taskmanager:
-    container_name: "mongo-db-taskmanager"
+  mongodb:
     image: mongo
     restart: always
     ports:
       - "27017:27017"
     volumes:
-      - mongodb_data-taskmanager:/data/db
+      - mongodb_data:/data/db
     networks:
       - TaskManager
-      
+
 volumes:
-  mongodb_data-taskmanager:
-  db-taskmanager:
-    name: db-taskmanager
+  TaskManager.database:
     external: false
-    
+  mongodb_data:
+
 networks:
   TaskManager:
-    name: TaskManager
     driver: bridge

@@ -24,7 +24,7 @@ public class Task : Entity
     public Task(Guid projectId, Guid assignedUserId, string title, string description, DateTime endDate, TaskStatusEnum status, TaskPriorityEnum priority)
     {
         WithProject(projectId);
-        WithProject(assignedUserId);
+        WithAssignedUserId(assignedUserId);
         WithName(title);
         WithDescription(description);
         WithEndDate(endDate);

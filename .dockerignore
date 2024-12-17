@@ -1,0 +1,14 @@
+# Ignorar arquivos binários e de build
+bin/
+obj/
+out/
+
+# Ignorar configurações específicas de usuário
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Ignorar dependências locais
+node_modules/
+*.log

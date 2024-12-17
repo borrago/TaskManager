@@ -11,7 +11,7 @@ public class AddTaskCommandValidator : AbstractValidator<AddTaskCommandInput>
         RuleFor(x => x.ProjectId)
             .MustAsync(async (projectId, cancellationToken) =>
             {
-                var tasks = await taskRepository.GetAllAsync(cancellationToken);
+                var tasks = await taskRepository.GetAsync(g => g.ProjectId == projectId, cancellationToken);
                 return tasks.Count < 20;
             })
             .WithMessage("O projeto não pode possuir mais de 20 tarefas.");
