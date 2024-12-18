@@ -111,3 +111,23 @@ Ainda no diretório que se encontra o Context da aplicação, execute o comando:
 Ainda no diretório que se encontra o Context da aplicação, execute o comando:
 
 `dotnet ef migrations script --startup-project ../TaskManager.Api`
+
+
+# Fase 2: Refinamento
+Para a segunda fase, escreva no arquivo README.md em uma sessão dedicada, o que você perguntaria para o PO visando o refinamento para futuras implementações ou melhorias.
+
+1 - O que temos atende uma demanda inicial? O que precisa ser implementado para que essa demanda inicial seja atendida?
+2 - Precisamos de prazos para execução das tarefas ou projetos? Caso sim, devemos avisar dos prazos para os usuários relacionados?
+3 - Os históricos que armazenamos está bom? Precisa de mais detalhes?
+4 - Quando podemos iniciar testes com o Front?
+
+# Fase 3: Final
+Na terceira fase, escreva no arquivo README.md em uma sessão dedicada o que você melhoraria no projeto, identificando possíveis pontos de melhoria, implementação de padrões, visão do projeto sobre arquitetura/cloud, etc.
+
+1 - Padrão nos retornos da API
+2 - Padrão de retorno para os validators
+3 - Padrão para receber objetos na mensageria ao invés de string
+4 - Tabela de comentários com usuários para as tasks
+5 - Melhoria nas consultas e gravações das tabelas de leitura
+6 - Melhoria na cobertura dos testes
+7 - Realizar testes de integração

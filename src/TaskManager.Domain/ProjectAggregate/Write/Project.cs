@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using TaskManager.Core.DomainObjects;
 
 namespace TaskManager.Domain.ProjectAggregate.Write;
@@ -13,6 +14,7 @@ public class Project : Entity
     public IEnumerable<Task> Tasks { get; private set; } = null!;
 
     // EF Core
+    [ExcludeFromCodeCoverage]
     protected Project()
     {
     }
